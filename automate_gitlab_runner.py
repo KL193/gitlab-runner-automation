@@ -28,7 +28,7 @@ def install_runner(version):
     if installed == version:
         print(f"GitLab Runner {version} already installed. Skipping install.")
         return
-    print(f"Installing GitLab Runner {version}...")
+    print(f"Installing GitLab Runner {version}")
     run_command('curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash')
     run_command("sudo apt update")
     run_command(f"sudo apt install -y gitlab-runner={version}-1")
