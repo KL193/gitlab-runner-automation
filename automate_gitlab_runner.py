@@ -76,9 +76,9 @@ def verify_runner_online(gitlab_url, project_id, access_token, ca_cert, descript
     for runner in response.json():
         if runner["description"] == description:
             if runner["online"]:
-                print(f"✅ Runner '{description}' is ONLINE and ready!")
+                print(f"Runner '{description}' is ONLINE and ready!")
                 return
             else:
-                print(f"⚠️  Runner registered but not online yet. Status: {runner['status']}")
+                print(f"Runner registered but not online yet. Status: {runner['status']}")
                 return
     raise Exception("Runner not found in project runners list.")
