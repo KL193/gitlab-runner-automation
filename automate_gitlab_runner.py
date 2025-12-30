@@ -32,3 +32,11 @@ def install_runner(version):
     run_command('curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash')
     run_command("sudo apt update")
     run_command(f"sudo apt install -y gitlab-runner={version}-1")
+
+
+def get_project_id(gitlab_url, project_path, access_token, ca_cert):
+    encoded_path = urllib.parse.quote_plus(project_path)
+    url = f"{gitlab_url.rstrip('/')}/api/v4/projects/{encoded_path}"
+    response = requests.get(url, headers={"PRIVATE-TOKEN": access_token}, verify=ca_cert)
+    response.raise_for_status()
+    return response.json()["id"]
