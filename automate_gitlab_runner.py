@@ -40,3 +40,16 @@ def get_project_id(gitlab_url, project_path, access_token, ca_cert):
     response = requests.get(url, headers={"PRIVATE-TOKEN": access_token}, verify=ca_cert)
     response.raise_for_status()
     return response.json()["id"]
+
+
+def create_runner_via_api(gitlab_url, project_id, access_token, ca_cert, description, tags):
+    url = f"{gitlab_url.rstrip('/')}/api/v4/user/runners"
+    payload = {
+        "runner_type": "project_type",
+        "project_id": project_id,
+        "description": description,
+        "tag_list": [tag.strip() for tag in tags.split(",")] if tags else []
+    }
+    response = requests.post(url, headers={"PRIVATE-TOKEN": access_token}, json=payload, verify=ca_cert)
+    response.raise_for_status()
+    return response.json()["token"]
