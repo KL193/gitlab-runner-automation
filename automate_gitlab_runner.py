@@ -65,3 +65,20 @@ def register_runner(gitlab_url, token, executor, ca_file):
         f'--tls-ca-file="{ca_file}"'
     )
     run_command(cmd)
+
+
+def verify_runner_online(gitlab_url, project_id, access_token, ca_cert, description):
+    print("Waiting for runner to come online...")
+    time.sleep(40)
+    url = f"{gitlab_url.rstrip('/')}/api/v4/projects/{project_id}/runners"
+    response = requests.get(url, headers={"PRIVATE-TOKEN": access_token}, verify=ca_cert)
+    response.raise_for_status()
+    for runner in response.json():
+        if runner["description"] == description:
+            if runner["online"]:
+                print(f"✅ Runner '{description}' is ONLINE and ready!")
+                return
+            else:
+                print(f"⚠️  Runner registered but not online yet. Status: {runner['status']}")
+                return
+    raise Exception("Runner not found in project runners list.")
