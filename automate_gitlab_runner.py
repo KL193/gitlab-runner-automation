@@ -112,3 +112,22 @@ def verify_runner_online(gitlab_url, project_id, access_token, description):
                 print(f" Runner registered but not online yet. Status: {runner['status']}")
                 return
     raise Exception("Runner not found in project runners list.")
+
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Automate GitLab Runner setup using only the project URL"
+    )
+    parser.add_argument("--project-url", required=True,
+                        help="Full GitLab project URL, e.g., https://gitlab.vizuamatix.com:6009/hnb-irr/demo1")
+    parser.add_argument("--description", default=DEFAULT_DESCRIPTION,
+                        help=f"Runner name in UI (default: '{DEFAULT_DESCRIPTION}')")
+    parser.add_argument("--tags", default=DEFAULT_TAGS,
+                        help="Comma-separated tags, e.g., demo_runner,backend")
+    parser.add_argument("--executor", default=DEFAULT_EXECUTOR,
+                        choices=["shell", "docker"], help="Executor type (default: shell)")
+    parser.add_argument("--version", default=DEFAULT_VERSION,
+                        help=f"GitLab Runner version (default: {DEFAULT_VERSION})")
+
+    args = parser.parse_args()
