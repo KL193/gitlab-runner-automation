@@ -131,3 +131,14 @@ def main():
                         help=f"GitLab Runner version (default: {DEFAULT_VERSION})")
 
     args = parser.parse_args()
+
+
+    # === Get access token from environment variable (secure & simple) ===
+    access_token = os.getenv("GITLAB_TOKEN")
+    if not access_token:
+        raise Exception(
+            "No access token found!\n"
+            "Set it once on the server:\n"
+            "    export GITLAB_TOKEN=\"glpat-your-real-token-here\"\n"
+            "Add to ~/.bashrc to make it permanent."
+        )
