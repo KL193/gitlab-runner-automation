@@ -22,3 +22,15 @@ def run_command(cmd, check=True):
     if check and result.returncode != 0:
         raise Exception(f"Command failed: {cmd}\nError: {result.stderr.strip()}")
     return result.stdout.strip()
+
+
+def get_installed_version():
+    """Check current GitLab Runner version."""
+    try:
+        output = run_command("/usr/bin/gitlab-runner --version", check=False)
+        for line in output.splitlines():
+            if "Version:" in line:
+                return line.split()[1]
+        return None
+    except:
+        return None
