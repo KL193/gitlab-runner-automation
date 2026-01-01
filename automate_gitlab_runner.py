@@ -55,3 +55,13 @@ def extract_gitlab_info(project_url):
     if project_path.endswith('.git'):
         project_path = project_path[:-4]
     return gitlab_url, project_path
+
+
+
+def get_project_id(gitlab_url, project_path, access_token):
+    """Get internal project ID using GitLab API."""
+    encoded_path = urllib.parse.quote_plus(project_path)
+    url = f"{gitlab_url.rstrip('/')}/api/v4/projects/{encoded_path}"
+    response = requests.get(url, headers={"PRIVATE-TOKEN": access_token}, verify=CA_CERT_PATH)
+    response.raise_for_status()
+    return response.json()["id"]
