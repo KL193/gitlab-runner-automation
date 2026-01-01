@@ -154,3 +154,29 @@ def main():
     # 2. Ensure CA cert exists and has correct permissions
     run_command(f"sudo mkdir -p /etc/gitlab-runner/certs")
     run_command(f"sudo chmod 644 {CA_CERT_PATH}")
+
+
+    # 3. Get project ID
+    project_id = get_project_id(gitlab_url, project_path, access_token)
+
+    # 4. Create runner via API and get token
+    token = create_runner_via_api(gitlab_url, project_id, access_token,
+                                  args.description, args.tags)
+
+    # 5. Register locally
+    register_runner(gitlab_url, token, args.executor)
+
+    # 6. Restart service
+    run_command("sudo systemctl restart gitlab-runner")
+
+    # 7. Verify
+    verify_runner_online(gitlab_url, project_id, access_token, args.description)
+
+    print("\n🎉 GitLab Runner successfully provisioned!")
+    print(f"   Project: {project_path}")
+    print(f"   Runner Name: {args.description}")
+    print(f"   Tags: {args.tags or 'none'}")
+    print(f"   Version: {args.version}")
+
+if __name__ == "__main__":
+    main()
