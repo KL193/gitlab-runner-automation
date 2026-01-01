@@ -45,3 +45,13 @@ def install_runner(version):
     run_command('curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash')
     run_command("sudo apt update")
     run_command(f"sudo apt install -y gitlab-runner={version}-1")
+
+
+def extract_gitlab_info(project_url):
+    """Extract GitLab base URL and project path from full project URL."""
+    parsed = urllib.parse.urlparse(project_url)
+    gitlab_url = f"{parsed.scheme}://{parsed.netloc}"
+    project_path = parsed.path.lstrip('/')
+    if project_path.endswith('.git'):
+        project_path = project_path[:-4]
+    return gitlab_url, project_path
