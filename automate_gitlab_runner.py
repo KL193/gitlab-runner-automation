@@ -142,3 +142,10 @@ def main():
             "    export GITLAB_TOKEN=\"glpat-your-real-token-here\"\n"
             "Add to ~/.bashrc to make it permanent."
         )
+    # Extract GitLab URL and project path
+    gitlab_url, project_path = extract_gitlab_info(args.project_url)
+    print(f"GitLab URL: {gitlab_url}")
+    print(f"Project Path: {project_path}")
+
+    # 1. Install runner version
+    install_runner(args.version)
