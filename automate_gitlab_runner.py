@@ -76,3 +76,6 @@ def create_runner_via_api(gitlab_url, project_id, access_token, description, tag
         "description": description,
         "tag_list": [tag.strip() for tag in tags.split(",")] if tags else []
     }
+    response = requests.post(url, headers={"PRIVATE-TOKEN": access_token}, json=payload, verify=CA_CERT_PATH)
+    response.raise_for_status()
+    return response.json()["token"]
