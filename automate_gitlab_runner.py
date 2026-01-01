@@ -79,3 +79,17 @@ def create_runner_via_api(gitlab_url, project_id, access_token, description, tag
     response = requests.post(url, headers={"PRIVATE-TOKEN": access_token}, json=payload, verify=CA_CERT_PATH)
     response.raise_for_status()
     return response.json()["token"]
+
+
+
+def register_runner(gitlab_url, token, executor):
+    """Register the runner locally on the server."""
+    print("Registering runner locally...")
+    cmd = (
+        f"sudo gitlab-runner register --non-interactive "
+        f'--url "{gitlab_url}" '
+        f'--token "{token}" '
+        f'--executor "{executor}" '
+        f'--tls-ca-file="{CA_CERT_PATH}"'
+    )
+    run_command(cmd)
