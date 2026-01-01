@@ -149,3 +149,8 @@ def main():
 
     # 1. Install runner version
     install_runner(args.version)
+
+
+    # 2. Ensure CA cert exists and has correct permissions
+    run_command(f"sudo mkdir -p /etc/gitlab-runner/certs")
+    run_command(f"sudo chmod 644 {CA_CERT_PATH}")
